@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Management System - Home</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #e0f7fa; /* Light cyan background */
+            color: #333; /* Darker text color for contrast */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure body takes up full height */
+        }
+        header {
+            background: linear-gradient(135deg, #00796b, #004d40); /* Green gradient */
+            color: white; /* White text for high contrast */
+            padding: 2rem 3rem; /* Increased padding for more vertical space */
+            text-align: center;
+            border-bottom: 4px solid #00332b; /* Darker green border */
+            position: relative;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7); /* Enhanced shadow for header */
+            border-radius: 0 0 15px 15px; /* Rounded bottom corners */
+        }
+        header h1 {
+            font-size: 3rem; /* Larger font size for header */
+            margin: 0;
+            letter-spacing: 1px; /* Slightly spaced letters for a modern look */
+        }
+        .logout-form {
+            position: absolute;
+            top: 3.25rem; /* Increased top margin for better spacing */
+            right: 4rem;
+        }
+        .logout-button {
+            background-color: #d9534f; /* Soft red background */
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6); /* Stronger shadow */
+        }
+        .logout-button:hover {
+            background-color: #c9302c; /* Darker red on hover */
+            transform: scale(1.05);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7); /* Enhanced shadow on hover */
+        }
+        .container {
+            flex: 1; /* Allow container to expand and fill available space */
+            max-width: 1200px; /* Increased max width for better spacing */
+            margin: 2rem auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero {
+            background-color: white; /* White background for consistency */
+            border: 1px solid #333; /* Matching border */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); /* Enhanced shadow */
+            padding: 3rem;
+            text-align: center;
+            width: 100%;
+            max-width: 900px; /* Control max width */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hero h1 {
+            color: #004d40; /* Dark text for headings */
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            margin: 0 0 2rem;
+            font-size: 1.2rem;
+            color: #666; /* Lighter gray text for contrast */
+        }
+        .quick-links {
+            display: flex;
+            flex-direction: column; /* Stack buttons vertically */
+            align-items: center;
+            gap: 1.5rem;
+            width: 100%;
+        }
+        .quick-links a {
+            background-color: #00493d; /* Dark teal button color */
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            width: 100%; /* Full width buttons */
+            max-width: 300px; /* Maximum width for buttons */
+            text-align: center;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6); /* Strong shadow */
+        }
+        .quick-links a:hover {
+            background-color: #002922; /* Darker shade on hover */
+            transform: scale(1.05);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7); /* Enhanced shadow on hover */
+        }
+
+        input[type="text"]:focus, 
+        input[type="number"]:focus, 
+        input[type="email"]:focus, 
+        input[type="date"]:focus, 
+        select:focus {
+            border-color: #FF8C00; /* Dark orange */
+            outline: none; /* Remove the default outline */
+        }
+        .blink {
+            animation: blink-red 0.5s forwards; /* Blink effect */
+        }
+        @keyframes blink-red {
+            0% {
+                border-color: #61a19b;
+                background-color: #9ff3eb; /* Original background */
+            }
+            50% {
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+            100% {
+                border-color: #333; /* Reset border color */
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+        }
+        .message-section {
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem auto;
+            width: 600px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .message-label {
+            font-size: 1.4rem;
+            color: #004d40;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+        .error-message {
+            color: #d32f2f;
+            margin-bottom: 1rem;
+        }
+        .success-message {
+            color: #388e3c;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Hostel Management System</h1>
+    <div class="logout-form">
+        <form action="/logout" method="POST">
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+    </div>
+</header>
+
+<div th:if="${error != null or message != null}" class="message-section">
+    <div class="message-label">Message:</div>
+    <p th:class="${error != null} ? 'error-message' : 'success-message'" th:text="${error != null ? error : message}"></p>
+</div>
+
+
+<div class="container">
+    <section class="hero">
+        <h1>Welcome to the Hostel Management System!</h1>
+        <p>These are the various functionalities:</p>
+        <div class="quick-links">
+            <a href="/students_management">Student Details</a>
+            <a href="/rooms_management">Room Details</a>
+            <a href="/payments">Payment Details</a>
+            <a href="/make-announcement">Make Announcement</a>
+            <a href="/make-report">Get Report</a>
+        </div>
+    </section>
+</div>
+<script>
+    // JavaScript to handle input effects
+    const inputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="date"], select');
+
+    inputs.forEach(input => {
+        // Change border color on focus
+        input.addEventListener('focus', function() {
+            this.style.borderColor = '#FF8C00'; // Dark orange
+        });
+
+        // Reset border color when focus is lost
+        input.addEventListener('blur', function() {
+            this.style.borderColor = '#333'; // Reset to original border color
+        });
+
+        // Add blink effect on input
+        input.addEventListener('input', function() {
+            this.classList.add('blink'); // Add blink class when typing
+            setTimeout(() => {
+                this.classList.remove('blink'); // Remove class after a short delay
+            }, 300); // Adjust the delay time as needed
+        });
+    });
+</script>
+</body>
+</html>

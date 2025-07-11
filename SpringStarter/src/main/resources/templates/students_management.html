@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Management</title>
+    <style> 
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #e0f7fa; /* Light cyan background */
+            color: #333; /* Darker text color for contrast */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Full-height body */
+        }
+        header {
+            background: linear-gradient(135deg, #00796b, #004d40); /* Green gradient */
+            color: white;
+            padding: 2rem 3rem; /* Increased padding: Top/Bottom 2rem, Left/Right 3rem */
+            text-align: center;
+            border-bottom: 4px solid #00332b; /* Darker green border */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Softer shadow */
+            border-radius: 0 0 15px 15px;
+        }
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        .container {
+            flex: 1;
+            max-width: 700px; /* Increased max-width */
+            margin: 2rem auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: flex-start; /* Align to the left */
+        }
+        .box {
+            background-color: white; /* White background for the container */
+            border: 1px solid #333; /* Border for central box */
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); /* Enhanced shadow */
+            padding: 3rem;
+            width: 100%;
+            max-width: 1400px; /* Increased max-width */
+            margin-bottom: 2rem; /* Space between form and back button */
+        }
+        h2 {
+            color: #004d40; /* Dark text for the heading */
+            text-align: left; /* Align heading to the left */
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        label {
+            color: #00796b; /* Darker color for labels */
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.9rem;
+        }
+        label[for="search-last-name"] {
+            margin-top: 1.5rem; /* Increase this value for more space */
+        }
+        input[type="text"], select {
+            width: calc(100% - 170px);
+            padding: 10px;
+            border: 1px solid #00796b; /* Darker border */
+            border-radius: 5px;
+            background-color: #f0f0f0; /* Light gray for inputs */
+            color: #333; /* Darker text color */
+            transition: border 0.1s, box-shadow 0.3s; /* Transition for focus effects */
+        }
+        input[type="text"]:focus, 
+        select:focus {
+            border-color: #FF8C00; /* Dark orange */
+            outline: none; /* Remove the default outline */
+        }
+        button {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #004d40; /* Professional blue */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6); /* Strong shadow */
+        }
+        button:hover {
+            background-color: #002922;
+            transform: scale(1.05);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7); /* Enhanced shadow */
+        }
+        .button-container {
+            display: flex;
+            gap: 8px;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .back-button {
+            background-color: #009688; /* Teal color */
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            color: white;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6); /* Strong shadow */
+        }
+        .back-button:hover {
+            background-color: #00796b; /* Darker teal on hover */
+            transform: scale(1.05);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7); /* Enhanced shadow */
+        }
+
+        input[type="text"]:focus, 
+        input[type="number"]:focus, 
+        input[type="email"]:focus, 
+        input[type="date"]:focus, 
+        select:focus {
+            border-color: #FF8C00; /* Dark orange */
+            outline: none; /* Remove the default outline */
+        }
+        .blink {
+            animation: blink-red 0.5s forwards; /* Blink effect */
+        }
+        @keyframes blink-red {
+            0% {
+                border-color: #61a19b;
+                background-color: #9ff3eb; /* Original background */
+            }
+            50% {
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+            100% {
+                border-color: #333; /* Reset border color */
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+        }
+        .message-section {
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem auto;
+            width: 600px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .message-label {
+            font-size: 1.4rem;
+            color: #004d40;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+        .error-message {
+            color: #d32f2f;
+            margin-bottom: 1rem;
+        }
+        .success-message {
+            color: #388e3c;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Student Management System</h1>
+    </header>
+
+    <div th:if="${error != null or message != null}" class="message-section">
+        <div class="message-label">Message:</div>
+        <p th:class="${error != null} ? 'error-message' : 'success-message'" th:text="${error != null ? error : message}"></p>
+    </div>
+
+    <main>
+        <div class="container">
+            <div class="box">
+                <h2>Add New Student</h2>
+                <form action="/add-student" method="get">
+                    <div class="button-container">
+                        <button type="submit" class="search-button">Add</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="box">
+                <h2>Search Student</h2>
+                <form action="/search-student" method="post">
+                    <label for="search-first-name">First Name:</label>
+                    <input type="text" id="search-first-name" name="firstName" required>
+
+                    <label for="search-last-name">Last Name:</label>
+                    <input type="text" id="search-last-name" name="lastName" required>
+
+                    <div class="button-container">
+                        <button type="submit" class="search-button">Search</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="box">
+                <h2>View All Students</h2>
+                <form action="/view-all-students" method="get">
+                    <label for="hostel">Hostel:</label>
+                    <select id="hostel" name="hostel" required>
+                        <option value="" disabled selected>Select Hostel</option>
+                        <option value="Hostel A">Hostel A</option>
+                        <option value="Hostel B">Hostel B</option>
+                        <option value="Hostel C">Hostel C</option>
+                    </select>
+                    <div class="button-container">
+                        <button type="submit" class="search-button">View</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="box">
+                <h2>Students By Due Date</h2>
+                <form action="/view-students-by-due-date" method="get">
+                    <label for="hostel-due">Hostel:</label>
+                    <select id="hostel-due" name="hostel" required>
+                        <option value="" disabled selected>Select Hostel</option>
+                        <option value="Hostel A">Hostel A</option>
+                        <option value="Hostel B">Hostel B</option>
+                        <option value="Hostel C">Hostel C</option>
+                    </select>
+                    <div class="button-container">
+                        <button type="submit" class="search-button">View</button>
+                    </div>
+                </form>
+            </div>
+            <button type="button" class="back-button" onclick="window.history.back()">Back</button>
+        </div>
+    </main>
+    <script>
+        // JavaScript to handle input effects
+        const inputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="date"], select');
+    
+        inputs.forEach(input => {
+            // Change border color on focus
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#FF8C00'; // Dark orange
+            });
+    
+            // Reset border color when focus is lost
+            input.addEventListener('blur', function() {
+                this.style.borderColor = '#333'; // Reset to original border color
+            });
+    
+            // Add blink effect on input
+            input.addEventListener('input', function() {
+                this.classList.add('blink'); // Add blink class when typing
+                setTimeout(() => {
+                    this.classList.remove('blink'); // Remove class after a short delay
+                }, 300); // Adjust the delay time as needed
+            });
+        });
+    </script>
+</body>
+</html>

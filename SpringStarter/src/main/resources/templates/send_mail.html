@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Mail</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #e0f7fa; /* Light cyan background */
+        }
+        header {
+            background: linear-gradient(135deg, #00796b, #004d40); /* Green gradient */
+            color: white;
+            padding: 2rem 3rem; /* Increased padding */
+            text-align: center;
+            border-bottom: 4px solid #00332b; /* Darker green border */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Softer shadow */
+            border-radius: 0 0 15px 15px;
+        }
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        .container {
+            max-width: 800px; /* Increased max-width */
+            margin: 2rem auto; /* Center the container */
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+        .box {
+            background-color: #ffffff; /* White background for the box */
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); /* Enhanced shadow */
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px; /* Increased max-width */
+            position: relative;
+            border: 1px solid #333; /* Border for central box */
+        }
+        h2 {
+            color: #004d40; /* Dark text for the heading */
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin: 0.5rem 0;
+            color: #00796b; /* Darker color for labels */
+        }
+        textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid #00796b; /* Darker border */
+            border-radius: 4px;
+            resize: none; /* Disable resizing */
+        }
+        button {
+            background-color: #004d40; /* Dark teal button color */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #00332b; /* Darker shade on hover */
+        }
+        .button-container {
+            display: flex;
+            justify-content: flex-start;
+            gap: 0.5rem; /* Space betw  een buttons */
+            margin-top: 1rem;
+        }
+        .back-button {
+            background-color: #009688; /* Color for the back button */
+            color: white;
+            padding: 10px 20px; /* Match padding to submit button */
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 16px; /* Match font size to submit button */
+            margin-left: 4.2rem;
+            margin-top: -2.5rem;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+        }
+        .back-button:hover {
+            background-color: #00796b; /* Darker teal on hover */
+        }
+        .submit-button {
+            background-color: #004d40; /* Dark teal color for the submit button */
+            color: white;
+            border: none;
+            padding: 10px 20px; /* Match padding */
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 16px; /* Match font size */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+        }
+        .submit-button:hover {
+            background-color: #00332b; /* Darker shade on hover */
+        }
+        input[type="text"]:focus, 
+        input[type="number"]:focus, 
+        input[type="email"]:focus, 
+        input[type="date"]:focus, 
+        select:focus {
+            border-color: #FF8C00; /* Dark orange */
+            outline: none; /* Remove the default outline */
+        }
+        .blink {
+            animation: blink-red 0.5s forwards; /* Blink effect */
+        }
+        @keyframes blink-red {
+            0% {
+                border-color: #61a19b;
+                background-color: #9ff3eb; /* Original background */
+            }
+            50% {
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+            100% {
+                border-color: #333; /* Reset border color */
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+        }
+        .message-section {
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem auto;
+            width: 600px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .message-label {
+            font-size: 1.4rem;
+            color: #004d40;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+        .error-message {
+            color: #d32f2f;
+            margin-bottom: 1rem;
+        }
+        .success-message {
+            color: #388e3c;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Send Mail</h1>
+    </header>
+
+    <div th:if="${error != null or message != null}" class="message-section">
+        <div class="message-label">Message:</div>
+        <p th:class="${error != null} ? 'error-message' : 'success-message'" th:text="${error != null ? error : message}"></p>
+    </div>
+
+    <main>
+        <div class="container">
+            <div class="box">
+                <h2>Send Mail to <span id="first-name" th:text="${student.firstName} + ' ' + ${student.lastName}"></span></h2>
+                <form action="/mail-sender" method="post">
+                    <input type="hidden" name="id" th:value="${student.id}"/>
+                    <label for="announcement-text">Mail:</label>
+                    <textarea id="mail-text" name="mail-text" rows="6" required></textarea>
+                    <div class="button-container">
+                        <button type="submit" class="submit-button">Mail</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="button-container" style="max-width: 800px; margin: 0 auto;"> <!-- Match the width of the container -->
+            <button type="button" class="back-button" onclick="window.history.back()">Back</button>
+        </div>
+    </main>
+    <script>
+        // JavaScript to handle input effects
+        const inputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="date"], select');
+    
+        inputs.forEach(input => {
+            // Change border color on focus
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#FF8C00'; // Dark orange
+            });
+    
+            // Reset border color when focus is lost
+            input.addEventListener('blur', function() {
+                this.style.borderColor = '#333'; // Reset to original border color
+            });
+    
+            // Add blink effect on input
+            input.addEventListener('input', function() {
+                this.classList.add('blink'); // Add blink class when typing
+                setTimeout(() => {
+                    this.classList.remove('blink'); // Remove class after a short delay
+                }, 300); // Adjust the delay time as needed
+            });
+        });
+    </script>
+</body>
+</html>

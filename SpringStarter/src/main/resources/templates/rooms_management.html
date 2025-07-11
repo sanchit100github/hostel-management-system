@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Management System</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #e0f7fa; /* Light cyan background */
+            color: #333; /* Darker text color for contrast */
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            min-height: 100vh; /* Full-height body */
+        }
+        header {
+            background: linear-gradient(135deg, #00796b, #004d40); /* Green gradient */
+            color: white;
+            padding: 2rem 3rem; /* Increased padding */
+            text-align: center;
+            border-bottom: 4px solid #00332b; /* Darker green border */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Softer shadow */
+            border-radius: 0 0 15px 15px;
+        }
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        .container {
+            flex: 1; /* Allow container to expand */
+            max-width: 700px; /* Increased max width */
+            margin: 2rem auto; /* Center the container */
+            padding: 2rem;
+            display: flex;
+            flex-direction: column; /* Column direction for proper alignment */
+            align-items: center;
+        }
+        .hero {
+            background-color: #ffffff; /* White background for the hero section */
+            border: 1px solid #333; /* Matching border */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6); /* Enhanced shadow */
+            padding: 2rem;
+            text-align: center;
+            width: 100%;
+            max-width: 900px; /* Control max width */
+            margin-bottom: 2rem; /* Space below the hero section */
+        }
+        .hero h1 {
+            color: #004d40; /* Dark text for headings */
+            font-size: 2.5rem; /* Larger font size */
+            margin-bottom: 1rem;
+            margin-top: 0rem;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #b0b0b0; /* Light gray text */
+        }
+        .quick-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem; /* Space between buttons */
+            width: 100%; /* Full width */
+        }
+        .quick-links a {
+            background-color: #004136; /* Professional blue background */
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            width: 100%; /* Full width buttons */
+            max-width: 300px; /* Max width for buttons */
+            text-align: center;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6); /* Strong shadow */
+        }
+        .quick-links a:hover {
+            background-color: #002922; /* Darker blue on hover */
+            transform: scale(1.05);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7); /* Enhanced shadow on hover */
+        }
+        .students-by-due-date {
+            background-color: #ffffff; /* White background for the section */
+            border: 1px solid #333; /* Matching border */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6); /* Enhanced shadow */
+            padding: 2rem;
+            width: 100%;
+            max-width: 900px; /* Control max width */
+            margin-bottom: 2rem; /* Space below this section */
+            text-align: left; /* Center text in this section */
+        }
+        .students-by-due-date h2 {
+            color: #004d40; /* Dark text for headings */
+            font-size: 2rem; /* Slightly smaller font size */
+            margin-bottom: 1rem;
+            margin-top: 0rem;
+        }
+        .students-by-due-date label {
+            color: #00796b; /* Darker color for labels */
+            display: block;
+            margin: 0.5rem 0; /* Margin for label */
+            font-size: large;
+        }
+        .students-by-due-date select {
+            width: calc(100% - 22px); /* Full width minus padding */
+            padding: 10px;
+            border: 1px solid #00796b; /* Darker border */
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        .students-by-due-date button {
+            background-color: #004136; /* Button color */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            /* margin-right: 37.8rem;     uncomment to left align */  
+        }
+        .students-by-due-date button:hover {
+            background-color: #011e19; /* Darker shade on hover */
+            transform: scale(1.05);
+        }
+        .button-container {
+            display: flex;
+            justify-content: flex-start; /* Align buttons to the left */
+            width: 100%; /* Full width */
+            max-width: 1000px; /* Match the hero section's max-width */
+            margin-right: 4rem;
+        }
+        .button-container button {
+            background-color: #009688; /* Teal background */
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            border-radius: 8px; /* Rounded corners */
+            font-size: 18px;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6); /* Shadow for the button */
+        }
+        .button-container button:hover {
+            background-color: #00796b; /* Darker teal on hover */
+            transform: scale(1.05);
+        }
+
+        /* Style for the new button container */
+        .view-button-container {
+            display: flex;
+            justify-content: flex-start; /* Align button to the left */
+            margin-top: 1rem; /* Add some space above the button */
+            width: 100%; /* Full width container */
+        }
+
+        /* Style adjustments for the View button */
+        .view-button-container button {
+            background-color: #004136; /* Button color */
+            color: white;
+            border: none;
+            padding: 12px 24px; /* Adjust padding for uniformity */
+            cursor: pointer;
+            border-radius: 8px; /* Rounded corners */
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6); /* Shadow for the button */
+        }
+
+        .view-button-container button:hover {
+            background-color: #002922; /* Darker shade on hover */
+            transform: scale(1.05);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7); /* Enhanced shadow on hover */
+        }
+        input[type="text"], select {
+            width: calc(100% - 170px);
+            padding: 10px;
+            border: 1px solid #00796b; /* Darker border */
+            border-radius: 5px;
+            background-color: #f0f0f0; /* Light gray for inputs */
+            color: #333; /* Darker text color */
+            transition: border 0.1s, box-shadow 0.3s; /* Transition for focus effects */
+        }
+        input[type="text"]:focus, 
+        select:focus {
+            border-color: #FF8C00; /* Dark orange */
+            outline: none; /* Remove the default outline */
+        }
+
+        input[type="number"]:focus, 
+        input[type="email"]:focus, 
+        input[type="date"]:focus, 
+        select:focus {
+            border-color: #FF8C00; /* Dark orange */
+            outline: none; /* Remove the default outline */
+        }
+        .blink {
+            animation: blink-red 0.5s forwards; /* Blink effect */
+        }
+        @keyframes blink-red {
+            0% {
+                border-color: #61a19b;
+                background-color: #9ff3eb; /* Original background */
+            }
+            50% {
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+            100% {
+                border-color: #333; /* Reset border color */
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+        }
+        .message-section {
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem auto;
+            width: 600px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .message-label {
+            font-size: 1.4rem;
+            color: #004d40;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+        .error-message {
+            color: #d32f2f;
+            margin-bottom: 1rem;
+        }
+        .success-message {
+            color: #388e3c;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Room Management System</h1>
+    </header>
+
+    <div th:if="${error != null or message != null}" class="message-section">
+        <div class="message-label">Message:</div>
+        <p th:class="${error != null} ? 'error-message' : 'success-message'" th:text="${error != null ? error : message}"></p>
+    </div>
+
+    <main>
+        <div class="container">
+            <section class="hero">
+                <h1>Room Functionalities:</h1>
+                <div class="quick-links">
+                    <a href="/add-room">Add Room</a>
+                    <a href="/search-edit-room">Update Room Details</a>
+                    <a href="/view-room">View Room Details</a>
+                </div>
+            </section>
+            <section class="students-by-due-date">
+                <h2>View Empty Rooms</h2>
+                <form action="/find-empty-rooms" method="get">
+                    <label for="hostel-due">Hostel:</label>
+                    <select id="hostel-due" name="hostel" required>
+                        <option value="" disabled selected>Select Hostel</option>
+                        <option value="Hostel A">Hostel A</option>
+                        <option value="Hostel B">Hostel B</option>
+                        <option value="Hostel C">Hostel C</option>
+                    </select>
+                    <div class="view-button-container">
+                        <button type="submit">View</button>
+                    </div>
+                </form>
+            </section>
+            <div class="button-container">
+                <button class="back-button" onclick="window.history.back()">Back</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        // JavaScript to handle input effects
+        const inputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="date"], select');
+    
+        inputs.forEach(input => {
+            // Change border color on focus
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#FF8C00'; // Dark orange
+            });
+    
+            // Reset border color when focus is lost
+            input.addEventListener('blur', function() {
+                this.style.borderColor = '#333'; // Reset to original border color
+            });
+    
+            // Add blink effect on input
+            input.addEventListener('input', function() {
+                this.classList.add('blink'); // Add blink class when typing
+                setTimeout(() => {
+                    this.classList.remove('blink'); // Remove class after a short delay
+                }, 300); // Adjust the delay time as needed
+            });
+        });
+    </script>
+</body>
+</html>

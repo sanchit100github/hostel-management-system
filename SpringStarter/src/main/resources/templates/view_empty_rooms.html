@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Rooms</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #e0f7fa;
+        }
+        header {
+            background-color: #00796b;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 4px solid #004d40;
+            margin-bottom: 50px;
+            border-bottom: 4px solid #00332b; /* Darker green border */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Softer shadow */
+            border-radius: 0 0 15px 15px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            
+        }
+        .box {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            margin-bottom: 1rem;
+            border: 1px solid #00796b; /* Adding border */
+        }
+        h1 {
+            color: #ffffff;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        h2 {
+            color: #004d40; /* New styling for hostel name */
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #9e9e9e;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #00796b;
+            color: white;
+        }
+        .button-container {
+            display: flex;
+            justify-content: flex-start; /* Align buttons to the left */
+            margin-top: 1rem;
+        }
+        .back-button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* Adding shadow */
+        }
+        .back-button:hover {
+            background-color: #004d40;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* Shadow on hover */
+        }
+        .message-section {
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem auto;
+            width: 600px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .message-label {
+            font-size: 1.4rem;
+            color: #004d40;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+        .error-message {
+            color: #d32f2f;
+            margin-bottom: 1rem;
+        }
+        .success-message {
+            color: #388e3c;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Available Rooms</h1>
+    </header>
+
+    <div th:if="${error != null or message != null}" class="message-section">
+        <div class="message-label">Message:</div>
+        <p th:class="${error != null} ? 'error-message' : 'success-message'" th:text="${error != null ? error : message}"></p>
+    </div>
+    
+    <main>
+        <div class="container">
+            <div class="box">
+                <!-- Display the hostel name once above the table -->
+                <h2 th:if="${avaRooms != null && !avaRooms.isEmpty()}" th:text="${avaRooms[0].hostel}"></h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <!-- Removed Hostel column -->
+                            <th>Room Number</th>
+                            <th>Current Capacity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Display message if no rooms are available -->
+                        <tr th:if="${avaRooms == null || avaRooms.isEmpty()}">
+                            <td colspan="2">No rooms available.</td>
+                        </tr>
+                        
+                        <!-- Iterate over rooms and display those with capacity > 0 -->
+                        <tr th:each="room : ${avaRooms}">
+                            <td th:text="${room.roomNo}"></td>
+                            <td th:text="${room.currCapacity}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="button-container">
+                <button class="back-button" onclick="window.history.back()">Back</button>
+            </div>
+        </div>
+        
+    </main>
+</body>
+</html>

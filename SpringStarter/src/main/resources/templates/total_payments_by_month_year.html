@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Total Payments by Month and Year</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        h2 {
+            color: #00796b;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #fff;
+            background-color: #00796b;
+        }
+        button:hover {
+            background-color: #004d40;
+        }
+        .btn-secondary {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #ccc;
+            color: #000;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        .btn-secondary:hover {
+            background-color: #999;
+        }
+        .amount {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div th:if="${totalAmount}" class="amount">
+            <h3>Total Payment Amount:</h3>
+            <p th:text="${totalAmount}"></p>
+        </div>
+        <div th:if="${totalAmount == null}">
+            <p>No payments found for the specified month and year.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Payment - Hostel Management System</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #e0f7fa; /* Light cyan background */
+            color: #333; /* Darker text color for contrast */
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            min-height: 100vh; /* Full-height body */
+        }
+        header {
+            background: linear-gradient(135deg, #00796b, #004d40); /* Green gradient */
+            color: white;
+            padding: 2rem 3rem; /* Increased padding: Top/Bottom 2rem, Left/Right 3rem */
+            text-align: center;
+            border-bottom: 4px solid #00332b; /* Darker green border */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Softer shadow */
+            border-radius: 0 0 15px 15px;
+        }
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        .container {
+            flex: 1;
+            width: 90%; /* Width set to 90% */
+            max-width: 450px; /* Increased max-width for better layout */
+            margin: 2rem auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: flex-start; /* Align to the left */
+        }
+        .form-container {
+            background-color: white; /* White background for the container */
+            border: 1px solid #333; /* Border for central box */
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); /* Enhanced shadow */
+            padding: 3rem;
+            width: 100%; /* Full width of the container */
+            margin-bottom: 2rem; /* Space between form and back button */
+            align-self: center;
+        }
+        .form-container h2 {
+            color: #004d40; /* Dark text for the heading */
+            text-align: left; /* Align heading to the left */
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        label {
+            color: #00796b; /* Darker color for labels */
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4rem; /* Increased gap for better separation */
+            margin-bottom: 2rem; /* Increased margin between form groups */
+        }
+        .form-group div {
+            flex: 1;
+            min-width: 300px; /* Adjusted for wider layout */
+        }
+        input[type="text"], input[type="number"], input[type="email"], input[type="file"], input[type="date"], select {
+            width: 95%; /* Full width of the container */
+            padding: 12px; /* Increased padding for inputs */
+            border: 1px solid #00796b; /* Darker border */
+            border-radius: 5px; /* Restored radius */
+            background-color: #f0f0f0; /* Light gray for inputs */
+            color: #333; /* Darker text color */
+            transition: border 0.1s, box-shadow 0.3s; /* Transition for focus effects */
+        }
+        input[type="text"]:focus, 
+        input[type="number"]:focus, 
+        input[type="email"]:focus, 
+        input[type="date"]:focus, 
+        select:focus {
+            border-color: #FF8C00; /* Dark orange */
+            outline: none; /* Remove the default outline */
+        }
+        .blink {
+            animation: blink-red 0.5s forwards; /* Blink effect */
+        }
+        @keyframes blink-red {
+            0% {
+                border-color: #61a19b;
+                background-color: #9ff3eb; /* Original background */
+            }
+            50% {
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+            100% {
+                border-color: #333; /* Reset border color */
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+        }
+        .radio-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        button {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #004d40; /* Professional blue */
+            color: white;
+            border: none;
+            border-radius: 8px; /* More rounded edges */
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6); /* Strong shadow */
+        }
+        button:hover {
+            background-color: #002922;
+            transform: scale(1.05);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7); /* Enhanced shadow */
+        }
+        .form-buttons {
+            display: flex;
+            justify-content: flex-start; /* Align buttons to the left */
+            margin-top: 2rem; /* Increased margin for form buttons */
+            position: relative;
+        }
+        .back-btn {
+            background-color: #009688; /* Teal color */
+            padding: 10px 20px;
+            border-radius: 8px; /* More rounded edges */
+            font-size: 1.2rem;
+            margin-left: -48px;
+            color: white;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6); /* Strong shadow */
+        }
+        .back-btn:hover {
+            background-color: #00796b; /* Darker teal on hover */
+            transform: scale(1.05);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7); /* Enhanced shadow */
+        }
+        .message-section {
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem auto;
+            width: 600px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .message-label {
+            font-size: 1.4rem;
+            color: #004d40;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+        .error-message {
+            color: #d32f2f;
+            margin-bottom: 1rem;
+        }
+        .success-message {
+            color: #388e3c;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>View Payment By Student</h1>
+</header>
+
+<div th:if="${error != null or message != null}" class="message-section">
+    <div class="message-label">Message:</div>
+    <p th:class="${error != null} ? 'error-message' : 'success-message'" th:text="${error != null ? error : message}"></p>
+</div>
+
+<div class="container">
+    <div class="form-container">
+        <h2>View Payments</h2>
+        <form action="#" th:action="@{/payments-viewByStudent}" method="get">
+
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" required><br><br>
+
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" required><br><br><br>
+
+            <button type="submit">View</button>
+        </form>
+    </div>
+    <button type="button" class="back-btn" onclick="window.history.back()">Back</button>
+</div>
+
+<script>
+    // JavaScript to handle input effects
+    const inputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="date"], select');
+
+    inputs.forEach(input => {
+        // Change border color on focus
+        input.addEventListener('focus', function() {
+            this.style.borderColor = '#FF8C00'; // Dark orange
+        });
+
+        // Reset border color when focus is lost
+        input.addEventListener('blur', function() {
+            this.style.borderColor = '#00796b'; // Original border color
+        });
+    });
+</script>
+
+</body>
+</html>

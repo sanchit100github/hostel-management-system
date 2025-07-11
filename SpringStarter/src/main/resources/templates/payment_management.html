@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Management</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #e0f7fa; /* Light cyan background */
+            color: #333; /* Darker text color for contrast */
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            min-height: 100vh; /* Full height for the body */
+        }
+        header {
+            background: linear-gradient(135deg, #00796b, #004d40); /* Green gradient */
+            color: white; /* White text for high contrast */
+            padding: 2rem 3rem; /* Increased padding */
+            text-align: center;
+            border-bottom: 4px solid #00332b; /* Darker green border */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Softer shadow */
+            border-radius: 0 0 15px 15px; /* Rounded bottom corners */
+        }
+        header h1 {
+            font-size: 3rem; /* Larger font size for header */
+            margin: 0;
+            letter-spacing: 1px; /* Slightly spaced letters */
+        }
+        .container {
+            flex: 1; /* Allow container to expand */
+            max-width: 1200px; /* Increased max width */
+            margin: 2rem auto; /* Center the container */
+            padding: 2rem; /* Increased padding for more space inside */
+            display: flex;
+            flex-direction: column; /* Ensure column direction */
+            align-items: center;
+        }
+        .hero {
+            background-color: #ffffff; /* White background for the hero section */
+            border: 1px solid #333; /* Matching border */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6); /* Enhanced shadow */
+            padding: 3rem; /* Increased padding */
+            text-align: center; /* Center text in this section */
+            width: 100%; /* Full width */
+            max-width: 900px; /* Control max width */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hero h2 {
+            color: #004d40; /* Dark text for headings */
+            font-size: 2.5rem; /* Larger font size */
+            margin-bottom: 2rem; /* Increased margin */
+            margin-top: 0rem;
+        }
+        .quick-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem; /* Increased space between buttons */
+            width: 100%; /* Full width */
+        }
+        .quick-links a {
+            background-color: #00493d; /* New fill color */
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            width: 100%; /* Full width buttons */
+            max-width: 300px; /* Max width for buttons */
+            text-align: center;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6); /* Strong shadow */
+        }
+        .quick-links a:hover {
+            background-color: #002922; /* Darker shade on hover */
+            transform: scale(1.05);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7); /* Enhanced shadow on hover */
+        }
+        .button-container {
+            display: flex;
+            justify-content: flex-start; /* Align buttons to the left */
+            margin-top: 2rem; /* Space above the button */
+            margin-right: 6rem;
+            width: 100%; /* Full width */
+            max-width: 900px; /* Match the hero section's max-width */
+        }
+        .back-button {
+            background-color: #009688; /* Teal background */
+            color: white;
+            border: none;
+            padding: 12px 24px; /* Padding for the button */
+            cursor: pointer;
+            border-radius: 8px; /* Rounded corners */
+            font-size: 18px; /* Font size */
+            transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6); /* Shadow for the button */
+        }
+        .back-button:hover {
+            background-color: #00796b; /* Darker teal on hover */
+            transform: scale(1.05); /* Slightly enlarge on hover */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7); /* Enhanced shadow on hover */
+        }
+
+        input[type="text"]:focus, 
+        input[type="number"]:focus, 
+        input[type="email"]:focus, 
+        input[type="date"]:focus, 
+        select:focus {
+            border-color: #FF8C00; /* Dark orange */
+            outline: none; /* Remove the default outline */
+        }
+        .blink {
+            animation: blink-red 0.5s forwards; /* Blink effect */
+        }
+        @keyframes blink-red {
+            0% {
+                border-color: #61a19b;
+                background-color: #9ff3eb; /* Original background */
+            }
+            50% {
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+            100% {
+                border-color: #333; /* Reset border color */
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+        }
+        .message-section {
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem auto;
+            width: 600px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .message-label {
+            font-size: 1.4rem;
+            color: #004d40;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+        .error-message {
+            color: #d32f2f;
+            margin-bottom: 1rem;
+        }
+        .success-message {
+            color: #388e3c;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Payment Management</h1>
+    </header>
+
+    <div th:if="${error != null or message != null}" class="message-section">
+        <div class="message-label">Message:</div>
+        <p th:class="${error != null} ? 'error-message' : 'success-message'" th:text="${error != null ? error : message}"></p>
+    </div>
+
+    <div class="container">
+        <section class="hero">
+            <h2>Payment Functionalities:</h2>
+            <div class="quick-links">
+                <a href="/payment-add" class="link-button">Add Payment</a>
+                <a href="/viewByMonthYear" class="link-button">View Payments by Month and Year</a>
+                <a href="/viewByStudent" class="link-button">View Payments by Student Name</a>
+            </div>
+        </section>
+        <div class="button-container">
+            <button class="back-button" onclick="window.history.back()">Back</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to handle input effects
+        const inputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="date"], select');
+    
+        inputs.forEach(input => {
+            // Change border color on focus
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#FF8C00'; // Dark orange
+            });
+    
+            // Reset border color when focus is lost
+            input.addEventListener('blur', function() {
+                this.style.borderColor = '#333'; // Reset to original border color
+            });
+    
+            // Add blink effect on input
+            input.addEventListener('input', function() {
+                this.classList.add('blink'); // Add blink class when typing
+                setTimeout(() => {
+                    this.classList.remove('blink'); // Remove class after a short delay
+                }, 300); // Adjust the delay time as needed
+            });
+        });
+    </script>
+</body>
+</html>

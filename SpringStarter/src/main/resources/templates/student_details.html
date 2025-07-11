@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #e0f7fa; /* Light cyan background */
+        }
+        header {
+            background: linear-gradient(135deg, #00796b, #004d40); /* Green gradient */
+            color: white;
+            padding: 2rem 3rem; /* Increased padding */
+            text-align: center;
+            border-bottom: 4px solid #00332b; /* Darker green border */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Softer shadow */
+            border-radius: 0 0 15px 15px;
+        }
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        .container {
+            max-width: 850px; /* Increased max-width */
+            margin: 2rem auto; /* Center the container */
+            padding: 2rem;
+        }
+        .box {
+            background-color: #ffffff; /* White background for the box */
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); /* Enhanced shadow */
+            padding: 2rem;
+            margin-bottom: 1rem;
+            border: 1px solid #333;
+        }
+        h2 {
+            color: #004d40; /* Dark text for the heading */
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .details {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping to the next line */
+        }
+        .detail-row {
+            width: 50%; /* Set width to 50% for two columns */
+            box-sizing: border-box; /* Include padding and border in the element's total width */
+        }
+        .details label {
+            color: #00796b; /* Darker color for labels */
+            font-weight: bold;
+            margin-bottom: 0.5rem; /* Space between label and value */
+        }
+        .details span {
+            color: #004d40; /* Darker text for values */
+        }
+        .student-photo {
+            text-align: left;
+            margin: 1rem 0;
+        }
+        .student-photo img {
+            border-radius: 50%;
+            width: 150px;
+        }
+        .button-container {
+            text-align: left;
+            margin-top: 1rem;
+            display: flex;
+            gap: 10px;
+        }
+        button, a {
+            background-color: #00796b; /* Professional dark green */
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            border-radius: 8px; /* Increased curve on edges */
+            font-size: 18px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Added shadow */
+            transition: box-shadow 0.3s ease, background-color 0.3s ease; /* Smooth transitions */
+        }
+        button:hover, a:hover {
+            background-color: #005b5b; /* Darker shade on hover */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6); /* Enhanced shadow on hover */
+        }
+        .update-btn {
+            background-color: #fbc02d; /* Yellow for update */
+            color: #000;
+        }
+        .update-btn:hover {
+            background-color: #f9a825; /* Darker yellow on hover */
+        }
+        .delete-btn {
+            background-color: #d32f2f; /* Red for delete */
+        }
+        .delete-btn:hover {
+            background-color: #b71c1c; /* Darker red on hover */
+        }
+        .mail-btn {
+            background-color: #004d40; /* Teal for mail */ 
+            color: white;
+        }
+        .mail-btn:hover {
+            background-color: #00332b; /* Darker teal on hover */ 
+        }
+
+        input[type="text"]:focus, 
+        input[type="number"]:focus, 
+        input[type="email"]:focus, 
+        input[type="date"]:focus, 
+        select:focus {
+            border-color: #FF8C00; /* Dark orange */
+            outline: none; /* Remove the default outline */
+        }
+        .blink {
+            animation: blink-red 0.5s forwards; /* Blink effect */
+        }
+        @keyframes blink-red {
+            0% {
+                border-color: #61a19b;
+                background-color: #9ff3eb; /* Original background */
+            }
+            50% {
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+            100% {
+                border-color: #333; /* Reset border color */
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+        }
+        .message-section {
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem auto;
+            width: 600px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .message-label {
+            font-size: 1.4rem;
+            color: #004d40;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+        .error-message {
+            color: #d32f2f;
+            margin-bottom: 1rem;
+        }
+        .success-message {
+            color: #388e3c;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Student Details</h1>
+    </header>
+
+    <div th:if="${error != null or message != null}" class="message-section">
+        <div class="message-label">Message:</div>
+        <p th:class="${error != null} ? 'error-message' : 'success-message'" th:text="${error != null ? error : message}"></p>
+    </div>
+    
+    <main>
+        <div class="container">
+            <div class="box">
+                <h2>Student Information:</h2>
+                <div class="student-photo">
+                    <img th:src="@{${student.photoPath}}" alt="Student Photo"/>
+                </div>
+                <div class="details">
+                    <div class="detail-row">
+                        <label for="first-name">First Name:</label>
+                        <span id="first-name" th:text="${student.firstName}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="guardian-name">Guardian Name:</label>
+                        <span id="guardian-name" th:text="${student.guardianName}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="middle-name">Middle Name:</label>
+                        <span id="middle-name" th:text="${student.middleName}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="guardian-Contact">Guardian Contact:</label>
+                        <span id="guardian-conatct" th:text="${student.guardianContact}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="last-name">Last Name:</label>
+                        <span id="last-name" th:text="${student.lastName}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="guardian-Address">Guardian Address:</label>
+                        <span id="guardian-Address" th:text="${student.guardianAddress}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="contact">Contact Number:</label>
+                        <span id="contact" th:text="${student.contact}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="address">Permanent Address:</label>
+                        <span id="address" th:text="${student.address}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="whatsapp">Whatsapp Number:</label>
+                        <span id="whatsapp" th:text="${student.whatsapp}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="work">Working Status:</label>
+                        <span id="work" th:text="${student.Work}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="email">Email ID:</label>
+                        <span id="email" th:text="${student.email}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="workplace">Work Place:</label>
+                        <span id="workplace" th:text="${student.WorkPlace}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="adhar">Adhar Number:</label>
+                        <span id="adhar" th:text="${student.adhar}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="workposition">Work Position:</label>
+                        <span id="workposition" th:text="${student.WorkPosition}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="pancard">Pan Number:</label>
+                        <span id="pancard" th:text="${student.pancard}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="due-date">Due Date:</label>
+                        <span id="due-date" th:text="${formattedDueDate}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="birth-date">Date of Birth:</label>
+                        <span id="birth-date" th:text="${formattedBirthDate}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="deposit">Deposit:</label>
+                        <span id="deposit" th:text="${student.deposit}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="age">Age:</label>
+                        <span id="age" th:text="${ageOpt}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="hostel">Hostel:</label>
+                        <span id="hostel" th:text="${student.room.hostel}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="parents-name">Parents Name:</label>
+                        <span id="parents-name" th:text="${student.pName}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="room">Room No:</label>
+                        <span id="room" th:text="${student.room.roomNo}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="parents-contact">Parents Contact Number:</label>
+                        <span id="parents-contact" th:text="${student.pContact}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="rent">Rent:</label>
+                        <span id="rent" th:text="${student.room.indRent}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="joining-date">Joining Date:</label>
+                        <span id="joining-date" th:text="${formattedJoiningDate}"></span>
+                    </div><br><br>
+                    <div class="detail-row">
+                        <label for="active">Active:</label>
+                        <span id="active" th:text="${student.active}"></span>
+                    </div><br><br>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button onclick="window.history.back()">Back</button>
+                <form action="/mail-student" method="get" style="display: inline;">
+                    <input type="hidden" name="id" th:value="${student.id}"/>
+                    <button type="submit" class="mail-btn">Mail</button>
+                </form>
+                <form action="/student-update" method="get" style="display: inline;">
+                    <input type="hidden" name="id" th:value="${student.id}"/>
+                    <button type="submit" class="update-btn">Update</button>
+                </form>
+                <form action="/delete-student" method="post" style="display: inline;">
+                    <input type="hidden" name="id" th:value="${student.id}"/>
+                    <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this student?')">Delete</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script>
+        // JavaScript to handle input effects
+        const inputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="date"], select');
+    
+        inputs.forEach(input => {
+            // Change border color on focus
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#FF8C00'; // Dark orange
+            });
+    
+            // Reset border color when focus is lost
+            input.addEventListener('blur', function() {
+                this.style.borderColor = '#333'; // Reset to original border color
+            });
+    
+            // Add blink effect on input
+            input.addEventListener('input', function() {
+                this.classList.add('blink'); // Add blink class when typing
+                setTimeout(() => {
+                    this.classList.remove('blink'); // Remove class after a short delay
+                }, 300); // Adjust the delay time as needed
+            });
+        });
+    </script>
+</body>
+</html>

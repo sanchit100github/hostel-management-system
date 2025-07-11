@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Students</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        /* Adjust these styles based on your project's theme */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 60%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .header {
+            background-color: #00796b;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 4px solid #004d40;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Softer shadow */
+            border-radius: 0 0 15px 15px;
+            position: relative; /* Positioning for full width */
+            left: 50%; 
+            right: 50%;
+            margin-left: -50vw; 
+            margin-right: -50vw; 
+            width: 100vw; /* Full viewport width */
+        }
+        h2 {
+            color: #004d40;
+            font-size: 1.8rem; /* Increased font size for h2 */
+            margin-bottom: 1rem; /* Space below the heading */
+        }
+        .student-list {
+            margin: 20px 0;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            margin-bottom: 1rem;
+            border: 1px solid #00796b; /* Adding border */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #9e9e9e;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #00796b;
+            color: #fff;
+        }
+        .btn-view {
+            background-color: #004d40;
+            color: #fff;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-view:hover {
+            background-color: #00332c;
+        }
+        .back-button {
+            background-color: #00796b; /* Color for Back button */
+            margin-top: 20px; /* Space above the button */
+            padding: 12px 24px; /* Slightly increased padding for the button */
+            border: none; /* Remove border */
+            border-radius: 4px; /* Rounded corners for the button */
+            font-size: 1.2rem; /* Increased font size for Back button */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Shadow for the Back button */
+            color: white; /* White text for the Back button */
+            cursor: pointer; /* Pointer cursor for better UX */
+            display: block; /* Make it a block element */
+            width: fit-content; /* Adjust width to fit content */
+            margin-left: 0; /* Align to left */
+        }
+        .back-button:hover {
+            background-color: #004d40; /* Hover color for Back button */
+        }
+        /* New styles for the total payment section */
+        .total-payment {
+            background: #fff; /* Light cyan background */
+            border: 1px solid #00796b; /* Matching border */
+            border-radius: 8px;
+            padding: 20px; /* Add padding */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            margin-top: 20px; /* Space above this section */
+            text-align: left; /* Left-aligned text */
+        }
+        .total-payment h3 {
+            margin: 0; /* Remove default margin */
+            color: #004d40; /* Darker color for the title */
+            font-size: 1.5rem; /* Slightly larger size */
+        }
+        .total-payment p {
+            font-size: 1.5rem; /* Increase font size for total amount */
+            font-weight: bold; /* Make it bold */
+            color: #d32f2f; /* Use a color for emphasis */
+            margin-top: 10px; /* Space above the total amount */
+        }
+        /* Styles for the no payments message */
+        .no-payments {
+            background: #fff; /* White background */
+            border: 1px solid #00796b; /* Matching border */
+            border-radius: 8px;
+            padding: 20px; /* Add padding */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            margin-top: 20px; /* Space above this section */
+            text-align: center; /* Center-aligned text */
+            color: #d32f2f; /* Color for the message */
+        }
+        .message-section {
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem auto;
+            width: 600px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .message-label {
+            font-size: 1.4rem;
+            color: #004d40;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+        .error-message {
+            color: #d32f2f;
+            margin-bottom: 1rem;
+        }
+        .success-message {
+            color: #388e3c;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Payments By Month And Year</h1>
+    </div>
+
+    <div th:if="${error != null or message != null}" class="message-section">
+        <div class="message-label">Message:</div>
+        <p th:class="${error != null} ? 'error-message' : 'success-message'" th:text="${error != null ? error : message}"></p>
+    </div>
+
+    <div class="container">
+        <h2>Payments:</h2>
+        <div class="student-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Student Name</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="payment : ${payments}">
+                        <td th:text="${payment.id}"></td>
+                        <td th:text="${payment.payDate}"></td>
+                        <td th:text="${payment.student.firstName} + ' ' + ${payment.student.lastName}"></td>
+                        <td th:text="${payment.amount}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div th:if="${#lists.isEmpty(payments)}" class="no-payments">
+                No payments found for the specified month and year.
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div th:if="${totalAmount}" class="total-payment">
+            <h3>Total Payment Amount:</h3>
+            <p th:text="${totalAmount}"></p>
+        </div> 
+    </div>
+    <div class="container">
+        <button type="button" class="back-button" onclick="window.history.back()">Back</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Mail</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #e0f7fa; /* Light cyan background */
+        }
+        header {
+            background: linear-gradient(135deg, #00796b, #004d40); /* Green gradient */
+            color: white;
+            padding: 2rem 3rem; /* Increased padding */
+            text-align: center;
+            border-bottom: 4px solid #00332b; /* Darker green border */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Softer shadow */
+            border-radius: 0 0 15px 15px;
+        }
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        .container {
+            max-width: 800px; /* Increased max-width */
+            margin: 2rem auto; /* Center the container */
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+        .box {
+            background-color: #ffffff; /* White background for the box */
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); /* Enhanced shadow */
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px; /* Increased max-width */
+            position: relative;
+            border: 1px solid #333; /* Border for central box */
+        }
+        h2 {
+            color: #004d40; /* Dark text for the heading */
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin: 0.5rem 0;
+            color: #00796b; /* Darker color for labels */
+            font-weight: bold; /* Bold labels for clarity */
+        }
+        select {
+            width: calc(100% - 22px); /* Adjust width to fit */
+            padding: 10px; /* Padding for select */
+            margin-bottom: 1rem;
+            border: 1px solid #00796b; /* Darker border */
+            border-radius: 4px; /* Rounded corners */
+            background-color: #f0f0f0; /* Light gray background */
+            color: #333; /* Darker text color */
+            appearance: none; /* Remove default arrow */
+            background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="%2300796b" viewBox="0 0 20 20"%3E%3Cpolygon points="0,0 20,0 10,10"/%3E%3C/svg%3E'); /* Custom arrow */
+            background-repeat: no-repeat;
+            background-position: right 10px center; /* Position arrow */
+            background-size: 10px; /* Size of custom arrow */
+        }
+        textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid #00796b; /* Darker border */
+            border-radius: 4px;
+            resize: none; /* Disable resizing */
+        }
+        button {
+            background-color: #004d40; /* Dark teal button color */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #00332b; /* Darker shade on hover */
+        }
+        .button-container {
+            display: flex;
+            justify-content: flex-start;
+            gap: 0.5rem; /* Space between buttons */
+            margin-top: 1rem;
+        }
+        .back-button {
+            background-color: #009688; /* Color for the back button */
+            color: white;
+            padding: 10px 20px; /* Match padding to submit button */
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px; /* Match font size to submit button */
+            margin-left: 4.2rem;
+            margin-top: -2.5rem;
+        }
+        .back-button:hover {
+            background-color: #00796b; /* Darker teal on hover */
+        }
+        .submit-button {
+            background-color: #004d40; /* Dark teal color for the submit button */
+            color: white;
+            border: none;
+            padding: 10px 20px; /* Match padding */
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px; /* Match font size */
+        }
+        .submit-button:hover {
+            background-color: #00332b; /* Darker shade on hover */
+        }
+        input[type="text"]:focus, 
+        input[type="number"]:focus, 
+        input[type="email"]:focus, 
+        input[type="date"]:focus, 
+        select:focus {
+            border-color: #FF8C00; /* Dark orange */
+            outline: none; /* Remove the default outline */
+        }
+        .blink {
+            animation: blink-red 0.5s forwards; /* Blink effect */
+        }
+        @keyframes blink-red {
+            0% {
+                border-color: #61a19b;
+                background-color: #9ff3eb; /* Original background */
+            }
+            50% {
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+            100% {
+                border-color: #333; /* Reset border color */
+                background-color: #9ff3eb; /* Red background during blink */
+            }
+        }
+        .message-section {
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem auto;
+            max-width: 500px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .message-label {
+            font-size: 1.4rem;
+            color: #004d40;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+        .error-message {
+            color: #d32f2f;
+            margin-bottom: 1rem;
+        }
+        .success-message {
+            color: #388e3c;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Make Announcememt</h1>
+    </header>
+
+    <div th:if="${error != null or message != null}" class="message-section">
+        <div class="message-label">Message:</div>
+        <p th:class="${error != null} ? 'error-message' : 'success-message'" th:text="${error != null ? error : message}"></p>
+    </div>
+
+    <main>
+        <div class="container">
+            <div class="box">
+                <form action="/send-announcement" method="post">
+                    <label for="hostel">Hostel:</label>
+                    <select id="hostel" name="hostel" required>
+                        <option value="" disabled selected>Select Hostel</option>
+                        <option value="Hostel A">Hostel A</option>
+                        <option value="Hostel B">Hostel B</option>
+                        <option value="Hostel C">Hostel C</option>
+                    </select>
+                    <label for="announcement-text">Announcement:</label>
+                    <textarea id="announcement-text" name="announcement-text" rows="6" required></textarea>
+                    <div class="button-container">
+                        <button type="submit" class="submit-button">Send</button>
+                    </div>
+                </form> 
+            </div>
+        </div>
+        <div class="button-container" style="max-width: 800px; margin: 0 auto;"> <!-- Match the width of the container -->
+            <button type="button" class="back-button" onclick="window.history.back()">Back</button>
+        </div>
+    </main>
+    <script>
+        // JavaScript to handle input effects
+        const inputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="date"], select');
+    
+        inputs.forEach(input => {
+            // Change border color on focus
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#FF8C00'; // Dark orange
+            });
+    
+            // Reset border color when focus is lost
+            input.addEventListener('blur', function() {
+                this.style.borderColor = '#333'; // Reset to original border color
+            });
+    
+            // Add blink effect on input
+            input.addEventListener('input', function() {
+                this.classList.add('blink'); // Add blink class when typing
+                setTimeout(() => {
+                    this.classList.remove('blink'); // Remove class after a short delay
+                }, 300); // Adjust the delay time as needed
+            });
+        });
+    </script>
+</body>
+</html>
